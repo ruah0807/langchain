@@ -1,6 +1,7 @@
 from langchain_core.runnables import RunnableParallel, RunnablePassthrough
 from langchain_openai import ChatOpenAI
 from langchain_core.output_parsers import StrOutputParser
+
 # API KEY를 환경변수로 관리하기 위한 설정파일
 from dotenv import load_dotenv
 
@@ -15,7 +16,6 @@ from langchain_teddynote import logging
 logging.langsmith("langchain_test")
 
 
-
 from langchain_openai import ChatOpenAI
 
 llm = ChatOpenAI(model="gpt-4o")
@@ -27,7 +27,7 @@ llm = ChatOpenAI(model="gpt-4o")
 #### 방법 1. from_template() 메소드를 이용하여 PromptTemplate 객체 생성
 # - 치환될 변수를 {변수} 로 묶어 템플릿 정의
 
-from langchain_core.prompts import PromptTemplate 
+from langchain_core.prompts import PromptTemplate
 
 # template 정의 . {country}는 변수로, 이후에 값이 들어갈 자리를 의미
 template = "{country}의 수도는 어디인가요?"
@@ -36,13 +36,13 @@ template = "{country}의 수도는 어디인가요?"
 prompt = PromptTemplate.from_template(template)
 
 # prompt 생성 : Format 메소드를 이용하여 변수에 값을 넣어줌.
-prompt = prompt.format(country= "대한민국")
+prompt = prompt.format(country="대한민국")
 
 # print(prompt)
 
 #######
 
-# chain = prompt | llm 
+# chain = prompt | llm
 
 # print(chain.invoke("미국").content)
 
@@ -59,14 +59,11 @@ prompt = prompt.format(country= "대한민국")
 template = "뮤지컬 {musical}의 가장 유명한 넘버는 무엇인가요?"
 
 # PromptTemplate 객체를 활용하여 prompt_template 생성
-prompt = PromptTemplate(
-    template = template,
-    input_variables=['musical']
-)
+prompt = PromptTemplate(template=template, input_variables=["musical"])
 
 # print(prompt.format(musical="위키드"))
 
-# chain = prompt | llm 
+# chain = prompt | llm
 
 # print(chain.invoke("위키드").content)
 
@@ -78,13 +75,13 @@ template = "뮤지컬 {musical1}과 {musical2}의 가장 유명한 넘버는 각
 
 # PromptTemplate 객체를 활용하여 prompt_template 생성
 prompt = PromptTemplate(
-    template = template,
-    input_variables=['musical1'],
+    template=template,
+    input_variables=["musical1"],
     partial_variables={
         "musical2": "지킬앤하이드"  # dictionary 형태로 partial_variables를 채워줌
-    }
+    },
 )
-# chain = prompt | llm 
+# chain = prompt | llm
 
 # print(prompt.format(musical1 = "라이온킹"))
 # print(chain.invoke("라이온킹").content)
@@ -92,8 +89,8 @@ prompt = PromptTemplate(
 
 prompt = PromptTemplate.from_template(template)
 
-prompt = prompt.partial(musical2 = "마틸다")    # PromptTemplate.from_template().partial()
-chain = prompt | llm 
+prompt = prompt.partial(musical2="마틸다")  # PromptTemplate.from_template().partial()
+chain = prompt | llm
 
 # print(chain.invoke("위키드").content)
 # print(chain.invoke({"musical1": "킹키부츠", "musical2" : "레베카"}).content)
@@ -114,6 +111,7 @@ chain = prompt | llm
 
 from datetime import datetime
 
+
 # 날짜를 반환하는 함수 정의
 def get_today():
     return datetime.now().strftime("%b %d")
@@ -122,18 +120,15 @@ def get_today():
 prompt = PromptTemplate(
     template="오늘의 날짜는 {today}입니다. 오늘이 생일인 유명 팝가수 {n}명을 나열해주세요. 생년월일도 함께 표기하세요 ",
     input_variables=["n"],
-    partial_variables={
-        "today": get_today  # 함수 실행 대기 
-    }
+    partial_variables={"today": get_today},  # 함수 실행 대기
 )
 
-# prompt.format(n=5)
+prompt.format(n=5)
 chain = prompt | llm
-# print(chain.invoke(5).content)
+print(chain.invoke(5).content)
 
 # 오늘날짜를 강제로 넣고 실행
-# print(chain.invoke({"today": "Oct 31", "n": 2}).content)
-
+print(chain.invoke({"today": "Oct 31", "n": 2}).content)
 
 
 #####################################################################
@@ -149,7 +144,7 @@ prompt_with_variable = prompt.format(fruit="kakao")
 # print(prompt_with_variable)
 
 prompt2 = load_prompt("prompts/capital.yaml", encoding="utf-8")
-# print(prompt2.format(country="Mexico"))
+print(prompt2.format(country="Mexico"))
 
 
 #####################################################################
@@ -198,7 +193,7 @@ message = chain.invoke(
     {"name": "Ryan", "user_input": "뮤지컬 위키드 주인공에 대해서 알려주실래요?"}
 )
 
-# print(message.content)
+print(message.content)
 
 
 #####################################################################
@@ -244,10 +239,10 @@ messages = chain.invoke(
             ),
             (
                 "ai",
-                "그래 그거야 !!!!!! 감점을 더 넣어!!!!!!!!!",
+                "그게 아니지 ! 좀더 감정을 넣어야해. 진짜 괜찮지 않은 사람이어야해!",
             ),
         ],
     }
 )
-print(messages)
-
+# print(formatted_chat_prompt)
+print(messages.content)
