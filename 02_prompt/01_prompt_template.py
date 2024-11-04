@@ -132,5 +132,122 @@ chain = prompt | llm
 # print(chain.invoke(5).content)
 
 # 오늘날짜를 강제로 넣고 실행
-print(chain.invoke({"today": "Oct 31", "n": 2}).content)
+# print(chain.invoke({"today": "Oct 31", "n": 2}).content)
+
+
+
+#####################################################################
+
+
+##### 파일로부터 template 읽어오기 #####
+
+from langchain_core.prompts import load_prompt
+
+prompt = load_prompt("prompts/fruit_color.yaml", encoding="utf-8")
+
+prompt_with_variable = prompt.format(fruit="kakao")
+# print(prompt_with_variable)
+
+prompt2 = load_prompt("prompts/capital.yaml", encoding="utf-8")
+# print(prompt2.format(country="Mexico"))
+
+
+#####################################################################
+
+
+####### ChatPromptTemplate #####
+
+# ChatPromptTemplate은 대화 목록을 프롬프트로 주입하고자 할 때 활용 가능
+# 메시지는 튜플(tuple)형식으로 구성하며, (role, message)로 구성하여 리스트로 생성 가능
+
+### role
+# "system": 시스템 설정 메시지. 주로 전역설정과 관련된 프롬프트
+# "human": 사용자 입력 메시지
+# "ai" : ai의 답변 메시지
+
+from langchain_core.prompts import ChatPromptTemplate
+
+chat_prompt = ChatPromptTemplate.from_template(
+    "뮤지컬 {musical}의 주인공은 누구인가요?"
+)
+
+chat_prompt.format(musical="위키드")
+
+chat_template = ChatPromptTemplate.from_messages(
+    [
+        # role, message
+        ("system", "당신은 뮤지컬전문가 AI입니다. 당신의 이름은 {name}입니다."),
+        ("human", "안녕!"),
+        ("ai", "안녕하세요, 무엇을 도와드릴까요?"),
+        ("human", "{user_input}"),
+    ]
+)
+# chat message 를 생성
+messages = chat_template.format_messages(
+    name="Ryan", user_input="당신의 이름은 무엇입니까?"
+)
+# print(messages)
+
+# 생성한 메시지를 바로 주입하여 결과 반환
+message = llm.invoke(messages).content
+# print(message)
+
+# chain 생성
+chain = chat_template | llm
+message = chain.invoke(
+    {"name": "Ryan", "user_input": "뮤지컬 위키드 주인공에 대해서 알려주실래요?"}
+)
+
+# print(message.content)
+
+
+#####################################################################
+
+##### Message Placeholder #####
+
+# Langchain은 포맷하는 동안 랜더링할 메시지를 완전히 제어할 수있는 Message Placeholder를 제공
+# 메시지 프롬프트 템플릿에 어떤 역할을 사용해야할지 확실하지 않거나, 서식 지정 중에 메시지 목록을 삽입하려는 경우 유용할 수 있다.
+
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+
+chat_prompt = ChatPromptTemplate.from_messages(
+    [
+        (
+            "system",
+            "당신은 뮤지컬 배우 입시 전문 AI 선생님 입니다. 당신의 임무는 학생과 레슨 과정에서의 상황을 주요 키워드로 대화 요약을 하는 것입니다.",
+        ),
+        MessagesPlaceholder(variable_name="conversation"),
+        ("human", "지금까지의 대화를 {word_count}단어로 요약합니다."),
+    ]
+)
+# print(chat_prompt)
+
+# conversation 대화 목록을 나중에 추가하고자 할때 MessagePlaceholder를 사용 가능
+
+formatted_chat_prompt = chat_prompt.format(
+    word_count=5,
+    conversation=[
+        ("human", "어떻게 나한테 이럴수 있어요? 그럼 저는 괜찮을 거라 생각하세요????"),
+        ("ai", "그게 아니지 ! 좀더 감정을 넣어야해. 진짜 괜찮지 않은 사람이어야해!"),
+    ],
+)
+
+chain = chat_prompt | llm
+messages = chain.invoke(
+    {
+        "word_count": 5,
+        "conversation": [
+            (
+                "human",
+                "어떻게 나한테 이럴수 있어요? 그럼 저는 괜찮을 거라 생각하세요????",
+            ),
+            (
+                "ai",
+                "그래 그거야 !!!!!! 감점을 더 넣어!!!!!!!!!",
+            ),
+        ],
+    }
+)
+print(messages)
 
