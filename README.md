@@ -1,0 +1,3 @@
+conda activate test_langchain
+
+pip install openai langchain notebook load_dotenv langchain_teddynote
