@@ -70,6 +70,139 @@ few_examples = [
         ```
         """,
     },
+    {
+        "input": "해당 비즈니스에 관련된 인물 리스트를 알려주세요",
+        "output": """
+        ```json
+        {
+            "valid": true,
+            "year_importance": 0,
+            "person_importance": 10,
+            "past_importance": 8,
+            "other_importance": 5,
+            "which_year": 0,
+            "related_list_of_people" : true,
+            "other_q":[
+                "이 비즈니스는 어떤 사람들이 참여하였나요?"
+            ]
+        }
+        ```
+        """,
+    },
+    {
+        "input": "해당 비즈니스에 관련 인물을 알려주세요.",
+        "output": """
+        ```json
+        {
+            "valid": true,
+            "year_importance": 0,
+            "person_importance": 10,
+            "past_importance": 8,
+            "other_importance": 5,
+            "which_year": 0,
+            "related_list_of_people" : true,
+            "other_q":[
+                "관련 인물의 컨텍 정보를 알려주세요"
+            ]
+        }
+        ```
+        """,
+    },
+    {
+        "input": "해당 비즈니스에 관련 인물을 알려주세요.",
+        "output": """
+        ```json
+        {
+            "valid": true,
+            "year_importance": 0,
+            "person_importance": 10,
+            "past_importance": 8,
+            "other_importance": 5,
+            "which_year": 0,
+            "related_list_of_people" : true,
+            "other_q":[
+                "관련 인물의 컨텍 정보를 알려주세요"
+            ]
+        }
+        ```
+        """,
+    },
+    {
+        "input": "...",
+        "output": """
+        ```json
+        {
+            "valid": false,
+            "year_importance": 0,
+            "person_importance": 0,
+            "past_importance": 0,
+            "other_importance": 0,
+            "which_year": 0,
+            "related_list_of_people" : false,
+            "other_q":[
+                "관련된 질문이 아닙니다."
+            ]
+        }
+        ```
+        """,
+    },
+    {
+        "input": "안녕",
+        "output": """
+        ```json
+        {
+            "valid": false,
+            "year_importance": 0,
+            "person_importance": 0,
+            "past_importance": 0,
+            "other_importance": 0,
+            "which_year": 0,
+            "related_list_of_people" : false,
+            "other_q":[
+                "관련된 질문이 아닙니다."
+            ]
+        }
+        ```
+        """,
+    },
+    {
+        "input": "...................................",
+        "output": """
+        ```json
+        {
+            "valid": false,
+            "year_importance": 0,
+            "person_importance": 0,
+            "past_importance": 0,
+            "other_importance": 0,
+            "which_year": 0,
+            "related_list_of_people" : false,
+            "other_q":[
+                "관련된 질문이 아닙니다."
+            ]
+        }
+        ```
+        """,
+    },
+    {
+        "input": "오늘 날씨가 어때??",
+        "output": """
+        ```json
+        {
+            "valid": false,
+            "year_importance": 0,
+            "person_importance": 0,
+            "past_importance": 0,
+            "other_importance": 0,
+            "which_year": 0,
+            "related_list_of_people" : false,
+            "other_q":[
+                "관련된 질문이 아닙니다."
+            ]
+        }
+        ```
+        """,
+    },
 ]
 
 ########################################################
