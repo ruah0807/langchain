@@ -2,6 +2,7 @@ langchain
 langchain_teddynote
 langchain_openai
 langchain_core
+langchain_community
 
 #agent
 langchain_experimental
