@@ -21,6 +21,15 @@ class GraphState(TypedDict):
     log : Annotated[str, "로그 저장"]
 
 
+RECEIVE_ANOMALY_EVENT = "receive_anomaly_event"
+VALIDATE_DATA = "validate_data"
+DECIDE_ACTION = "decide_action"
+SEND_WARNING = "send_warning"
+SEND_CRITICAL_ALERT = "send_critical_alert"
+LOG_EVENT = "log_event"
+
+
+
 
 
 # 1. 데이터 수신 (MQTT / ESB)
@@ -74,34 +83,40 @@ def log_event(state: GraphState) -> GraphState:
 # 7. LangGraph 노드 연결
 graph = StateGraph(GraphState)
 
+
+
+
 # create Nodes
-graph.add_node("receive_anomaly_event", receive_anomaly_event)
-graph.add_node("validate_data", validate_data)
-graph.add_node("decide_action", decide_action)
-graph.add_node("send_warning", send_warning)
-graph.add_node("send_critical_alert", send_critical_alert)
-graph.add_node("log_event", log_event)
+graph.add_node(RECEIVE_ANOMALY_EVENT, receive_anomaly_event)
+graph.add_node(VALIDATE_DATA, validate_data)
+graph.add_node(DECIDE_ACTION, decide_action)
+graph.add_node(SEND_WARNING, send_warning)
+graph.add_node(SEND_CRITICAL_ALERT, send_critical_alert)
+graph.add_node(LOG_EVENT, log_event)
+
 
 # create Edges
-graph.add_edge(START, "receive_anomaly_event")
-graph.add_edge("receive_anomaly_event", "validate_data")
-graph.add_edge("validate_data", "decide_action")
+graph.add_edge(START, RECEIVE_ANOMALY_EVENT)
+graph.add_edge(RECEIVE_ANOMALY_EVENT, VALIDATE_DATA)
+graph.add_edge(VALIDATE_DATA, DECIDE_ACTION)
+
 
 # decide_action의 조건부 분기 설정
 graph.add_conditional_edges(
-    "decide_action",
+    DECIDE_ACTION,
     decide_action,  # 조건 함수
     {
-        "send_warning": "send_warning",
-        "send_critical_alert": "send_critical_alert",
+        SEND_WARNING: SEND_WARNING,
+        SEND_CRITICAL_ALERT: SEND_CRITICAL_ALERT,
     }
 )
 
-graph.add_edge("send_warning", "log_event")
 
-graph.add_edge("send_critical_alert", "log_event")
+graph.add_edge(SEND_WARNING, LOG_EVENT)
 
-graph.add_edge("log_event", END)
+graph.add_edge(SEND_CRITICAL_ALERT, LOG_EVENT)
+
+graph.add_edge(LOG_EVENT, END)
 
 
 # 8. 실행
