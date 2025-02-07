@@ -6,3 +6,7 @@ langchain_community
 
 #agent
 langchain_experimental
+
+langgraph
+
+faiss-cpu

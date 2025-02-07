@@ -1,13 +1,12 @@
 from langchain_community.document_loaders import PDFPlumberLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from typing import List, Annotated
-from base import RetrievalChain
+from rag.base import RetrievalChain
 
 
 
 class PDFRetrievalChain(RetrievalChain):
     def __init__(self, source_uri: Annotated[str, "Source URI"]):
-        super().__init__()
         self.source_uri = source_uri
         self.k = 10
 

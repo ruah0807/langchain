@@ -1,8 +1,8 @@
-from langchain_core.prompts import load_prompt
+from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_community.vectorstores import FAISS
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
-
+from langchain_core.runnables import RunnableLambda
 from abc import ABC, abstractmethod
 from operator import itemgetter
 from langchain import hub
@@ -48,16 +48,17 @@ class RetrievalChain(ABC):
 
     def create_prompt(self):
         # YAML 파일에서 프롬프트를 로드
-        with open("prompt/rag-prompt.yaml", "r") as file: # 프롬프트 상대경로로
-            prompt_config= safe_load(file)
-        # 필요한 데이터 추출
-        template = prompt_config.get("template", "")
-        input_variables = prompt_config.get("input_variables", [])
+        with open("prompt/rag-prompt.yaml", "r") as file:
+            prompt_config = safe_load(file)
+        
+        # PromptTemplate 객체 생성
+        return PromptTemplate(
+            template=prompt_config.get("template", ""),
+            input_variables=prompt_config.get("input_variables", [])
+        )
 
-        return {
-            "template": template,
-            "input_variables": input_variables
-        }
+    # def create_prompt(self):
+    #     return hub.pull("teddynote/rag-prompt-chat-history")
     
 
     @staticmethod
@@ -70,32 +71,30 @@ class RetrievalChain(ABC):
         docs = self.load_documents(self.source_uri)
         text_splitter = self.create_text_splitter()
         split_docs = self.split_documents(docs, text_splitter)
-        
         self.vectorstore = self.create_vectorstore(split_docs)
         self.retriever = self.create_retriever(self.vectorstore)
-
         model = self.create_model()
         prompt = self.create_prompt()
 
         self.chain = (
             {
-                "question" : itemgetter("question"),
+                "question": itemgetter("question"),
                 "context": itemgetter("context"),
                 "chat_history": itemgetter("chat_history"),
             }
-            | prompt
-            | model 
+            | prompt  # PromptTemplate 객체를 직접 사용
+            | model
             | StrOutputParser()
         )
         return self
     
 
+if __name__ == "__main__":
+    def test_create_prompt():
+        retrieval_chain = RetrievalChain()
+        prompt = retrieval_chain.create_prompt()
+        print("Template:", prompt["template"])
+        print("Input Variables:", prompt["input_variables"])
 
-def test_create_prompt():
-    retrieval_chain = RetrievalChain()
-    prompt = retrieval_chain.create_prompt()
-    print("Template:", prompt["template"])
-    print("Input Variables:", prompt["input_variables"])
-
-# 테스트 실행
-test_create_prompt()
+    # 테스트 실행
+    test_create_prompt()
