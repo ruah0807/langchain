@@ -65,9 +65,9 @@ class BasicToolNode:
 
         # 도구 호출 결과 ***** (중요)
         outputs = []
-        for tool_call in message.tool_calls:
+        for tool_call in message.tool_calls: # tool_call : 도구 호출 정보
             # 도구 호출 후 결과 저장
-            tool_result = self.tools_list[tool_call["name"]].invoke(tool_call["args"])
+            tool_result = self.tools_list[tool_call["name"]].invoke(tool_call["args"]) # name : 도구 이름 | arg : 검색 쿼리
             outputs.append(
                 # 도구 호출 결과를 메시지로 저장
                 ToolMessage(

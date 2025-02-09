@@ -30,8 +30,6 @@ LOG_EVENT = "log_event"
 
 
 
-
-
 # 1. 데이터 수신 (MQTT / ESB)
 def receive_anomaly_event(state:GraphState) -> GraphState:
     # 이상 감지 AI에서 Agent로 데이터 수신
