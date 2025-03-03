@@ -4,7 +4,7 @@
 # Langgraph에서 지원하는 `human_in_the_loop` 워크플로우 형태
 # `interrupt_before` 또는 `interrupt_after` 노드를 사용하여 사용자 개입 지점 설정
 
-from a_agent_graph import create_human_in_the_loop_graph, State
+from a_agent_graph import agent_graph, State
 
 ####################### 7. interrup_before 추가 #######################
 
@@ -12,7 +12,7 @@ from langchain_teddynote.messages import pretty_print_messages
 from langchain_core.runnables import RunnableConfig
 
 
-graph = create_human_in_the_loop_graph()
+graph = agent_graph()
 # 질문
 # question = "time-llm 논문과 관련된 코드를 찾아줘."
 question = "AI관련 뉴스 찾아줘"

@@ -85,7 +85,7 @@ builder.add_node("e", aggregate_fanout_values)
 def route_bc_or_cd(state:State)-> Sequence[str]:
     if state["which"] == "cd":
         return["c", "d"]
-    return ["b","c"]
+    return ["b","c", "d"]
 
 # 중간 노드들 설정 및 조건부 엣지 추가
 intermediates = ["b", "c", "d"]
@@ -107,8 +107,8 @@ graph = builder.compile()
 #     f.write(img.data)
 
 # 그래프 실행
-# print_graph =graph.invoke({"aggregate":[], "which": "bc", "fanout_values":[]})
-# print(print_graph)
+print_graph =graph.invoke({"aggregate":[], "which": "bc", "fanout_values":[]})
+print(print_graph)
 # 출력 결과
 # Adding I'm B to [HumanMessage(content="I'm A", additional_kwargs={}, response_metadata={}, id='962ec3f3-9893-49b7-b1ab-eda116c197d9')] in parallel.
 # Adding I'm C to [HumanMessage(content="I'm A", additional_kwargs={}, response_metadata={}, id='962ec3f3-9893-49b7-b1ab-eda116c197d9')] in parallel.
@@ -120,8 +120,8 @@ graph = builder.compile()
 # HumanMessage(content="I'm E", additional_kwargs={}, response_metadata={}, id='44162280-6921-4369-8036-0422fa7c4600')], 
 # 'fanout_values': [{'value': ["I'm B"], 'weight': 0.3}, {'value': ["I'm C"], 'weight': 0.4}], 'which': 'bc'}
 
-print_graph =graph.invoke({"aggregate":[], "which": "cd", "fanout_values":[]})
-print(print_graph)
+# print_graph =graph.invoke({"aggregate":[], "which": "cd", "fanout_values":[]})
+# print(print_graph)
 
 # Adding I'm C to [HumanMessage(content="I'm A", additional_kwargs={}, response_metadata={}, id='916f709f-b95a-486a-96c6-6cc644ff4753')] in parallel.
 # Adding I'm D to [HumanMessage(content="I'm A", additional_kwargs={}, response_metadata={}, id='916f709f-b95a-486a-96c6-6cc644ff4753')] in parallel.
