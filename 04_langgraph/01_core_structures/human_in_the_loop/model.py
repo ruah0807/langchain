@@ -2,7 +2,7 @@ from ollama import Client
 from ollama import AsyncClient
 import asyncio
 from dataclasses import dataclass
-
+from langchain_ollama import ChatOllama
 LLAMA_MODEL = "llama3.1:latest"
 import logging
 
@@ -22,7 +22,7 @@ class OllamaLLM:
             messages = [{"role": "user", "content": question}]
 
             response = self.client.chat(
-                model="llama3.1:latest",
+                model=LLAMA_MODEL,
                 messages=messages
             )
             if response.get("error"):
@@ -31,12 +31,13 @@ class OllamaLLM:
             return response["message"]["content"]
         except Exception as e:
             self.logger.error(f"Error during API call: {e}")
+            print(f"Error during API call: {e}")
             raise
 
     def bind_tools(self, tools):
         self.tools = tools
         # 도구 사용 로직 추가
-        self.logger.info(f"Tools bound: {tools}")
+        # print(f"Tools bound: {tools}")
         return self
     
 

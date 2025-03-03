@@ -1,8 +1,7 @@
 import asyncio
 from a_agent_graph import agent_graph, State
 from b_runnable_config import RunnableConfig
-
-
+from langchain_ollama import ChatOllama
 
 graph = agent_graph()
 question = "AI관련 뉴스 찾아줘"
