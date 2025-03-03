@@ -154,3 +154,4 @@ for event in events :
 # 메세지 전체 하나씩 출력
 # for message in snapshot.values["messages"]:
 #     message.pretty_print()
+

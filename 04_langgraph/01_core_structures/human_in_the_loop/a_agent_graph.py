@@ -18,11 +18,14 @@ class State(TypedDict):
     messages: Annotated[list, add_messages]
     # dummy_data: Annotated[str,"dummy"]
     # 사람에게 질문할지 여부를 묻는 상태 추가
+    ask_human : bool
 
 # 랜덤한 해시값을 생성하는 generate_random_hash 함수를 사용
 def generate_random_hash():
-    return f"{random.randint(0, 0xffffff):06x}"
-
+    part1 = f"{random.randint(0, 0xffff):05x}"
+    part2 = f"{random.randint(0, 0xffff):09x}"
+    part3 = f"{random.randint(0, 0xffff):07x}"
+    return f"ruah-{part1}-{part2}-{part3}"
 
 def agent_graph():
     ########## 2. 도구 정의 및 바인딩 ##########
@@ -49,7 +52,8 @@ def agent_graph():
     tools= [search_news, search_github]
 
     # LLM 초기화
-    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.67)
+    # llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.67)
+    llm = ChatOpenAI(model="gpt-4o", temperature=0.67)
 
     # 도구와 LLM 결합
     llm_with_tools = llm.bind_tools(tools)
