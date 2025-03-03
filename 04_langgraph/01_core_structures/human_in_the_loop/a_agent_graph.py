@@ -10,6 +10,7 @@ from langgraph.prebuilt import ToolNode, tools_condition
 from langchain_teddynote.tools import GoogleNews
 from langchain_community.tools.tavily_search import TavilySearchResults
 import random
+from model import OllamaLLM
 
 load_dotenv()
 
@@ -18,7 +19,7 @@ class State(TypedDict):
     messages: Annotated[list, add_messages]
     # dummy_data: Annotated[str,"dummy"]
     # 사람에게 질문할지 여부를 묻는 상태 추가
-    ask_human : bool
+    # ask_human : bool
 
 # 랜덤한 해시값을 생성하는 generate_random_hash 함수를 사용
 def generate_random_hash():
@@ -53,17 +54,20 @@ def agent_graph():
 
     # LLM 초기화
     # llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.67)
-    llm = ChatOpenAI(model="gpt-4o", temperature=0.67)
+    # llm = ChatOpenAI(model="gpt-4o", temperature=0.67)
+    llm = OllamaLLM()
 
     # 도구와 LLM 결합
     llm_with_tools = llm.bind_tools(tools)
 
     ########## 3. 노드 추가 ##########
     def chatbot(state: State):
+    # Ollama LLM을 사용하여 메시지 처리
+        question = state["messages"][0].content
+        response = llm_with_tools.invoke(question)
         return {
-            "messages": [llm_with_tools.invoke(state["messages"])],
-            # "dummy_data": "[ChatBot] 호출, dummy data" # test dummy data
-            }
+            "messages": [response],
+        }
 
     # 상태 그래프 생성
     graph_builder = StateGraph(State)
