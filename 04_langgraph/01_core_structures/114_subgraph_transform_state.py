@@ -130,7 +130,9 @@ parent.add_edge("parent_2", END)
 parent_graph = parent.compile()
 
 # from IPython.display import Image
-# img = Image(parent_graph.get_graph(xray=True).draw_mermaid_png())
+
+# graph_image = parent_graph.get_graph(xray=True).draw_mermaid_png()
+# img = Image(graph_image)
 # with open("parent_graph.png", "wb") as f:
 #     f.write(img.data)
 

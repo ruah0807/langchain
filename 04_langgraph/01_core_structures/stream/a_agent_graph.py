@@ -9,25 +9,18 @@ from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode, tools_condition
 from langchain_teddynote.tools import GoogleNews
 from langchain_community.tools.tavily_search import TavilySearchResults
-import random
 
 load_dotenv()
 
 ########## 1. 상태 정의 ##########
 class State(TypedDict):
     messages: Annotated[list, add_messages]
-    # dummy_data: Annotated[str,"dummy"]
-    # 사람에게 질문할지 여부를 묻는 상태 추가
+    dummy_data: Annotated[str,"dummy"]
 
-# 랜덤한 해시값을 생성하는 generate_random_hash 함수를 사용
-def generate_random_hash():
-    return f"{random.randint(0, 0xffffff):06x}"
-
-
-def agent_graph():
+def define_tools():
     ########## 2. 도구 정의 및 바인딩 ##########
     @tool
-    def search_news(query: str) -> List[Dict[str, str]]:
+    def search_keyword(query: str) -> List[Dict[str, str]]:
         """Look up news by keyword"""
         news_tool = GoogleNews()
         return "\n".join(
@@ -46,19 +39,30 @@ def agent_graph():
         return tavily_tool.invoke({"query": query})
     
     # 도구 바인딩
-    tools= [search_news, search_github]
+    tools= [search_keyword, search_github]
 
     # LLM 초기화
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.67)
 
     # 도구와 LLM 결합
-    llm_with_tools = llm.bind_tools(tools)
+    # llm_with_tools = llm.bind_tools(tools)
+
+    # 117_stream_tags.py 태그추가 for stream
+    llm_with_tools = llm.bind_tools(tools).with_config(tags=["WANT_TO_STREAM"])
+
+    return llm_with_tools, tools
+
+
+
+def agent_graph():
+    
+    llm_with_tools, tools = define_tools()
 
     ########## 3. 노드 추가 ##########
     def chatbot(state: State):
         return {
             "messages": [llm_with_tools.invoke(state["messages"])],
-            # "dummy_data": "[ChatBot] 호출, dummy data" # test dummy data
+            "dummy_data": "[ChatBot] 호출, dummy data" # test dummy data
             }
 
     # 상태 그래프 생성
@@ -68,7 +72,7 @@ def agent_graph():
     graph_builder.add_node("chatbot", chatbot)
 
     # 도구 노드 생성 및 추가
-    tool_node = ToolNode(tools=tools)
+    tool_node = ToolNode(tools)
     graph_builder.add_node("tools", tool_node)
 
     # 조건부 엣지

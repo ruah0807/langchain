@@ -1,9 +1,9 @@
 #### 중간단계의 State 수동 업데이트 ####
 
-from a_agent_graph import create_human_in_the_loop_graph, State
+from a_agent_graph import agent_graph, State
 from langchain_core.runnables import RunnableConfig
 
-graph = create_human_in_the_loop_graph()
+graph = agent_graph()
 
 
 question = "LangGraph 가 무엇인지 조사하여 알려주세요!"
@@ -154,3 +154,4 @@ for event in events :
 # 메세지 전체 하나씩 출력
 # for message in snapshot.values["messages"]:
 #     message.pretty_print()
+
