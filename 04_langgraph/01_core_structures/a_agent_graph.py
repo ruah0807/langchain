@@ -3,6 +3,7 @@ from typing import Annotated, List, Dict
 from typing_extensions import TypedDict
 from langchain_core.tools import tool
 from langchain_openai import ChatOpenAI
+from langchain_ollama import ChatOllama
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import add_messages
@@ -23,7 +24,7 @@ class State(TypedDict):
 def generate_random_hash():
     return f"{random.randint(0, 0xffffff):06x}"
 
-
+ChatOllama(model="llama3.1:8b").bind_tools
 def agent_graph():
     ########## 2. 도구 정의 및 바인딩 ##########
     @tool

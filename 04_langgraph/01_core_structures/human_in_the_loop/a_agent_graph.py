@@ -6,7 +6,7 @@ from langchain_openai import ChatOpenAI
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import add_messages
-from langgraph.prebuilt import ToolNode, tools_condition
+from langgraph.prebuilt.tool_node import ToolNode, tools_condition
 from langchain_teddynote.tools import GoogleNews
 from langchain_community.tools.tavily_search import TavilySearchResults
 import random

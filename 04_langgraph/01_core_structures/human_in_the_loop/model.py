@@ -1,11 +1,10 @@
 from ollama import Client
 from ollama import AsyncClient
-import asyncio
-from dataclasses import dataclass
 from langchain_ollama import ChatOllama
-LLAMA_MODEL = "llama3.1:latest"
 import logging
+import asyncio
 
+LLAMA_MODEL = "llama3.1:latest"
 
 class OllamaLLM:
     def __init__(self):

@@ -51,37 +51,37 @@ config = {"configurable": {"thread_id": "1"}}
 
 
 # # 동기 스트림 처리(stream_mode="values")
-# for chunk in graph.stream(inputs, config, stream_mode="values"):
-#     # chunk는 dictionary 형태(key:value)
-#     for state_key, state_value in chunk.items():
-#         if state_key =="messages":
-#             state_value[-1].pretty_print()
+for chunk in graph.stream(inputs, config, stream_mode="values"):
+    # chunk는 dictionary 형태(key:value)
+    for state_key, state_value in chunk.items():
+        if state_key =="messages":
+            state_value[-1].pretty_print()
 
 
 ###################### 비동기 (Asynchronous) 방식의 스트리밍 ######################
 #  `astream()`메서드는 비동기 스트림 처리를 통해 그래프를 실행하고 값모드로 청크 단위 응답을 생성한다.
 #  `async for` 문을 사용하여 비동기 스트림 처리를 수행.
 
-# async def values_stream(inputs, config):
-#     async for chunk in graph.astream(inputs, config, stream_mode="values"):
-#         # chunk는 dictionary 형태 (key:value)
-#         for state_key, state_value in chunk.items():
-#             if state_key == "messages":
-#                 state_value[-1].pretty_print()
+async def values_stream(inputs, config):
+    async for chunk in graph.astream(inputs, config, stream_mode="values"):
+        # chunk는 dictionary 형태 (key:value)
+        for state_key, state_value in chunk.items():
+            if state_key == "messages":
+                state_value[-1].pretty_print()
 
 # # 비동기 함수 실행
-# import asyncio
+import asyncio
 
-# async def main():
-#     await values_stream(inputs, config)
+async def main():
+    await values_stream(inputs, config)
 
-# asyncio.run(main())
+asyncio.run(main())
 
 ###################### `stream_mode`= "updates" ######################
 
 # `updates` 모드는 각 단계의 업데이트된 State 만을 출력한다.
 
-# 출력은 노드 이름을 key로, 없데이트된 값을 value로 하는 dictionary 형태.
+# 출력은 `노드 이름`을 `key`로, 없데이트된 값을 value로 하는 dictionary 형태.
 
 # chunk.items()
 
@@ -92,31 +92,31 @@ config = {"configurable": {"thread_id": "1"}}
 
 
 ######### 동기 Synchronous 방식의 updates스트리밍 
-# for chunk in graph.stream(inputs, config, stream_mode="updates"):
-#     # chunk는 dictionary 형태 (key:노드, value:노드의 상태값)
-#     for node, value in chunk.items():
-#         if node:
-#             print(f"\n[ Node : {node}]\n")
-#         if "messages" in value:
-#             value["messages"][-1].pretty_print()
+for chunk in graph.stream(inputs, config, stream_mode="updates"):
+    # chunk는 dictionary 형태 (key:노드, value:노드의 상태값)
+    for node, value in chunk.items():
+        if node:
+            print(f"\n[ Node : {node}]\n")
+        if "messages" in value:
+            value["messages"][-1].pretty_print()
 
 ######### 비동기 Asynchronous 방식의 updates스트리밍 스트리밍 
-# async def updates_stream(inputs, config):
-#     async for chunk in graph.astream(inputs, config, stream_mode="updates"):
-#         # chunk는 dictionary 형태 (key:value)
-#         for node, value in chunk.items():
-#             if node:
-#                 print(f"\n[ Node : {node}]\n")
-#             if "messages" in value:
-#                 value["messages"][-1].pretty_print()
+async def updates_stream(inputs, config):
+    async for chunk in graph.astream(inputs, config, stream_mode="updates"):
+        # chunk는 dictionary 형태 (key:value)
+        for node, value in chunk.items():
+            if node:
+                print(f"\n[ Node : {node}]\n")
+            if "messages" in value:
+                value["messages"][-1].pretty_print()
 
 # # 비동기 함수 실행
-# import asyncio
+import asyncio
 
-# async def main():
-#     await updates_stream(inputs, config)
+async def main():
+    await updates_stream(inputs, config)
 
-# asyncio.run(main())
+asyncio.run(main())
 
 
 ###################### `stream_mode`= "messages" ######################

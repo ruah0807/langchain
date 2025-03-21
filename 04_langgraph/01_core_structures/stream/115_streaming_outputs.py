@@ -77,26 +77,26 @@ print(list(graph.channels.keys()))
 # 'branch:chatbot:__self__:tools', 'branch:tools:__self__:chatbot', 'branch:tools:__self__:tools', 
 # 'start:chatbot', 'branch:chatbot:tools_condition:chatbot', 'branch:chatbot:tools_condition:tools']
 
-# for event in graph.stream(
-#     input=input,
-#     config=config,
-#     output_keys=["messages", "dummy_data"],  # messages 를 추가해 보세요!
-# ):
-#     for key, value in event.items():
-#         # key 는 노드 이름
-#         print(f"\n[ {key} ]\n")
+for event in graph.stream(
+    input=input,
+    config=config,
+    output_keys=["messages", "dummy_data"],  # messages 를 추가해 보세요!
+):
+    for key, value in event.items():
+        # key 는 노드 이름
+        print(f"\n[ {key} ]\n")
 
-#         # dummy_data 가 존재하는 경우
-#         if value:
-#             # value 는 노드의 출력값
-#             print(value.keys())
-#             # dummy_data key 가 존재하는 경우
-#             if "dummy_data" in value:
-#                 print(value["dummy_data"])
-#             # messages key 가 존재하는 경우
-#             if "messages" in value:
-#                 # 가장 최근 메시지 1개만 출력
-#                 print(value["messages"])
+        # dummy_data 가 존재하는 경우
+        if value:
+            # value 는 노드의 출력값
+            print(value.keys())
+            # dummy_data key 가 존재하는 경우
+            if "dummy_data" in value:
+                print(value["dummy_data"])
+            # messages key 가 존재하는 경우
+            if "messages" in value:
+                # 가장 최근 메시지 1개만 출력
+                print(value["messages"])
 
 
 ######################## `stream_mode` 옵션 ########################

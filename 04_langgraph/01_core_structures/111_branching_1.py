@@ -109,6 +109,7 @@ graph = builder.compile()
 # 그래프 실행
 print_graph =graph.invoke({"aggregate":[], "which": "bc", "fanout_values":[]})
 print(print_graph)
+
 # 출력 결과
 # Adding I'm B to [HumanMessage(content="I'm A", additional_kwargs={}, response_metadata={}, id='962ec3f3-9893-49b7-b1ab-eda116c197d9')] in parallel.
 # Adding I'm C to [HumanMessage(content="I'm A", additional_kwargs={}, response_metadata={}, id='962ec3f3-9893-49b7-b1ab-eda116c197d9')] in parallel.
