@@ -173,9 +173,9 @@ def replan_step(state: PlanExecute):
     else:
         next_plan = output.action.steps
         if len(next_plan) == 0:
-            return{"response": "No more steps needed."}
+            return{"response": "No more steps needed."} # plan을 반환했지만 추가한 계획이 없는 경우.
         else:
-            return {"plan": next_plan}
+            return {"plan": next_plan} # 추가한 계획이 있는 경우.
 
 # 에이전트 실행종류 여부를 결정하는 함수.
 def should_end(state: PlanExecute):
